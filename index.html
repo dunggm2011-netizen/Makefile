@@ -1,0 +1,888 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>🔥 AUTO MAKE AIM</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.2.0/crypto-js.min.js">
+    </script>
+    <style>
+        /* ===== RESET ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Courier New', monospace;
+        }
+
+        body {
+            background: #05050a;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* ===== NỀN ĐỘNG ===== */
+        body::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(circle at 20% 50%, #00ffaa11 0%, transparent 50%),
+                radial-gradient(circle at 80% 50%, #ff00aa11 0%, transparent 50%),
+                radial-gradient(circle at 50% 80%, #00aaff11 0%, transparent 50%);
+            animation: bgPulse 8s ease-in-out infinite alternate;
+            z-index: 0;
+        }
+
+        @keyframes bgPulse {
+            0% { opacity: 0.3; transform: scale(1); }
+            100% { opacity: 0.8; transform: scale(1.1); }
+        }
+
+        /* ===== PARTICLE NEON + DÂY ===== */
+        #particleNetwork {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        /* ===== CONTAINER ===== */
+        .container {
+            position: relative;
+            z-index: 2;
+            background: rgba(8, 8, 20, 0.88);
+            backdrop-filter: blur(16px);
+            padding: 48px 44px;
+            border-radius: 40px;
+            border: 1px solid #00ffaa44;
+            box-shadow: 0 0 80px #00ffaa22, inset 0 0 80px #00ffaa11;
+            max-width: 640px;
+            width: 100%;
+            animation: containerPulse 5s ease-in-out infinite alternate;
+            transition: 0.4s;
+        }
+
+        .container:hover {
+            border-color: #ff00aa66;
+            box-shadow: 0 0 100px #ff00aa33, inset 0 0 80px #ff00aa22;
+        }
+
+        @keyframes containerPulse {
+            0% { border-color: #00ffaa44; box-shadow: 0 0 60px #00ffaa22; }
+            100% { border-color: #ff00aa44; box-shadow: 0 0 80px #ff00aa33; }
+        }
+
+        /* ===== TIÊU ĐỀ ===== */
+        h1 {
+            text-align: center;
+            font-size: 36px;
+            font-weight: 700;
+            letter-spacing: 6px;
+            text-transform: uppercase;
+            color: #00ffaa;
+            text-shadow: 0 0 30px #00ffaa88, 0 0 80px #00ffaa44;
+            animation: glitchText 3s infinite;
+            margin-bottom: 4px;
+        }
+
+        h1 span {
+            color: #ff00aa;
+            text-shadow: 0 0 30px #ff00aa88, 0 0 80px #ff00aa44;
+        }
+
+        @keyframes glitchText {
+            0%, 100% { transform: skew(0deg); }
+            5% { transform: skew(3deg); color: #ff00aa; }
+            10% { transform: skew(-3deg); color: #00ffaa; }
+            15% { transform: skew(0deg); color: #ffffff; }
+        }
+
+        .sub {
+            text-align: center;
+            color: #8899bb;
+            font-size: 13px;
+            letter-spacing: 3px;
+            margin-bottom: 32px;
+            border-bottom: 1px solid #00ffaa22;
+            padding-bottom: 18px;
+            text-transform: uppercase;
+            animation: subGlow 3s infinite alternate;
+        }
+
+        @keyframes subGlow {
+            0% { color: #8899bb; text-shadow: 0 0 10px #00ffaa22; }
+            100% { color: #bbddff; text-shadow: 0 0 30px #ff00aa44; }
+        }
+
+        /* ===== FORM ===== */
+        .form-group {
+            margin-bottom: 26px;
+        }
+
+        label {
+            display: block;
+            color: #88ccdd;
+            font-size: 13px;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+            text-shadow: 0 0 10px #00ffaa44;
+        }
+
+        input[type="file"],
+        input[type="password"],
+        select {
+            width: 100%;
+            padding: 16px 20px;
+            background: rgba(0, 20, 30, 0.8);
+            border: 1px solid #00ffaa44;
+            border-radius: 20px;
+            color: #ccddff;
+            font-size: 15px;
+            outline: none;
+            transition: 0.4s;
+            cursor: pointer;
+            backdrop-filter: blur(4px);
+            box-shadow: inset 0 0 30px #00ffaa11;
+        }
+
+        input[type="file"]:hover,
+        input[type="password"]:hover,
+        select:hover {
+            border-color: #ff00aa;
+            box-shadow: 0 0 40px #ff00aa33, inset 0 0 40px #ff00aa11;
+        }
+
+        input[type="file"]:focus,
+        input[type="password"]:focus,
+        select:focus {
+            border-color: #00ffaa;
+            box-shadow: 0 0 50px #00ffaa44, inset 0 0 40px #00ffaa11;
+        }
+
+        .mode-desc {
+            color: #6688aa;
+            font-size: 12px;
+            margin-top: 8px;
+            padding-left: 6px;
+            letter-spacing: 1px;
+            border-left: 2px solid #00ffaa44;
+            padding-left: 16px;
+            transition: 0.3s;
+        }
+
+        /* ===== NÚT ===== */
+        button {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(135deg, #00ffaa22, #ff00aa22);
+            border: 1px solid #00ffaa66;
+            border-radius: 50px;
+            font-size: 18px;
+            font-weight: 700;
+            color: #00ffaa;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            cursor: pointer;
+            transition: 0.4s;
+            box-shadow: 0 0 50px #00ffaa22, inset 0 0 50px #00ffaa11;
+            backdrop-filter: blur(4px);
+            margin-top: 10px;
+        }
+
+        button:hover {
+            transform: scale(1.02);
+            border-color: #ff00aa;
+            box-shadow: 0 0 70px #ff00aa44, inset 0 0 70px #ff00aa22;
+            color: #ff00aa;
+        }
+
+        button:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        /* ===== STATUS ===== */
+        #status {
+            margin-top: 22px;
+            padding: 14px;
+            border-radius: 20px;
+            text-align: center;
+            font-weight: 500;
+            display: none;
+            font-size: 14px;
+            letter-spacing: 1px;
+            border: 1px solid #00ffaa33;
+            background: rgba(0, 20, 30, 0.6);
+            backdrop-filter: blur(4px);
+        }
+
+        #status.loading {
+            display: block;
+            color: #ffdd00;
+            border-color: #ffdd0044;
+            box-shadow: 0 0 40px #ffdd0022;
+        }
+
+        #status.success {
+            display: block;
+            color: #00ffaa;
+            border-color: #00ffaa44;
+            box-shadow: 0 0 40px #00ffaa22;
+        }
+
+        #status.error {
+            display: block;
+            color: #ff4466;
+            border-color: #ff446644;
+            box-shadow: 0 0 40px #ff446622;
+        }
+
+        /* ===== LOG ===== */
+        #log {
+            margin-top: 16px;
+            background: rgba(0, 10, 20, 0.8);
+            padding: 14px 20px;
+            border-radius: 20px;
+            color: #6688aa;
+            font-size: 12px;
+            max-height: 150px;
+            overflow-y: auto;
+            border: 1px solid #00ffaa22;
+            display: none;
+            font-family: 'Courier New', monospace;
+            white-space: pre-wrap;
+            word-break: break-all;
+            line-height: 1.8;
+            box-shadow: inset 0 0 40px #00ffaa11;
+        }
+
+        #log.show {
+            display: block;
+        }
+
+        /* ===== DOWNLOAD ===== */
+        .download-wrap {
+            display: none;
+            margin-top: 18px;
+        }
+
+        .download-wrap.show {
+            display: block;
+            animation: fadeGlow 0.6s ease;
+        }
+
+        @keyframes fadeGlow {
+            0% { opacity: 0; transform: scale(0.9); box-shadow: 0 0 0 #00ffaa; }
+            100% { opacity: 1; transform: scale(1); box-shadow: 0 0 60px #00ffaa33; }
+        }
+
+        #downloadBtn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #00ffaa22, #00aaff22);
+            border: 1px solid #00ffaa88;
+            border-radius: 50px;
+            color: #00ffaa;
+            font-weight: 700;
+            font-size: 17px;
+            cursor: pointer;
+            transition: 0.4s;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            box-shadow: 0 0 50px #00ffaa22, inset 0 0 50px #00ffaa11;
+            word-break: break-all;
+            white-space: normal;
+            text-align: center;
+            line-height: 1.4;
+        }
+
+        #downloadBtn:hover {
+            border-color: #ff00aa;
+            box-shadow: 0 0 70px #ff00aa44, inset 0 0 70px #ff00aa22;
+            color: #ff00aa;
+        }
+
+        #downloadBtn .file-name {
+            display: block;
+            font-size: 13px;
+            font-weight: 400;
+            color: #88ccdd;
+            margin-top: 6px;
+            word-break: break-all;
+            white-space: normal;
+            max-width: 100%;
+            letter-spacing: 1px;
+        }
+
+        /* ===== FOOTER ===== */
+        .footer {
+            text-align: center;
+            color: #445566;
+            font-size: 11px;
+            margin-top: 30px;
+            border-top: 1px solid #00ffaa22;
+            padding-top: 20px;
+            letter-spacing: 2px;
+        }
+
+        .badge {
+            display: inline-block;
+            background: #00ffaa11;
+            padding: 4px 14px;
+            border-radius: 30px;
+            color: #00ffaa;
+            font-size: 11px;
+            border: 1px solid #00ffaa33;
+            margin: 0 4px;
+        }
+
+        .badge-anti {
+            border-color: #ff00aa33;
+            color: #ff00aa;
+            background: #ff00aa11;
+        }
+
+        .badge-magic {
+            border-color: #ffaa0033;
+            color: #ffaa00;
+            background: #ffaa0011;
+        }
+
+        .badge-lock {
+            border-color: #00aaff33;
+            color: #00aaff;
+            background: #00aaff11;
+        }
+
+        /* ===== SCROLLBAR ===== */
+        #log::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        #log::-webkit-scrollbar-track {
+            background: #0a0a1a;
+        }
+
+        #log::-webkit-scrollbar-thumb {
+            background: #00ffaa44;
+            border-radius: 10px;
+        }
+
+        #log::-webkit-scrollbar-thumb:hover {
+            background: #ff00aa66;
+        }
+
+        /* ===== ẨN NỘI DUNG CHÍNH ===== */
+        #mainContent {
+            display: none;
+        }
+
+        #mainContent.show {
+            display: block;
+        }
+
+        /* ===== MẬT KHẨU ===== */
+        #passwordSection {
+            display: block;
+        }
+
+        #passwordSection.hidden {
+            display: none;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 500px) {
+            .container { padding: 30px 20px; }
+            h1 { font-size: 26px; }
+            button { font-size: 15px; padding: 14px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ===== PARTICLE NEON + DÂY ===== -->
+    <canvas id="particleNetwork"></canvas>
+
+    <!-- ===== CONTAINER ===== -->
+    <div class="container">
+
+        <!-- ===== MẬT KHẨU ===== -->
+        <div id="passwordSection">
+            <h1>🔐 <span>XÁC</span> THỰC</h1>
+            <div class="sub">nhập mật khẩu để tiếp tục</div>
+            <div class="form-group">
+                <label>🔑 Mật khẩu</label>
+                <input type="password" id="passwordInput" placeholder="Nhập mật khẩu..." />
+            </div>
+            <button id="unlockBtn">🚀 Mở khóa</button>
+            <div id="passwordStatus" style="margin-top:16px;text-align:center;color:#ff4466;display:none;">❌ Sai mật khẩu!</div>
+        </div>
+
+        <!-- ===== NỘI DUNG CHÍNH ===== -->
+        <div id="mainContent">
+            <h1>☄️<span>AUTO</span>MAKE AIM</h1>
+            <div class="sub">nhanh • gọn • tiện</div>
+
+            <form id="aimForm">
+                <div class="form-group">
+                    <label>📁 Upload cache</label>
+                    <input type="file" id="fileInput" accept="*/*" required />
+                </div>
+
+                <div class="form-group">
+                    <label>⚡ Chọn chế độ</label>
+                    <select id="modeSelect" required>
+                        <option value="head">🎯 aim Head</option>
+                        <option value="chest">🎯 aim Chest</option>
+                        <option value="body">🎯 aim Body</option>
+                        <option value="drag">🐉 aim Drag (Dragon)</option>
+                        <option value="mixed">🎯 aim Mixed</option>
+                        <option value="auto">🎯 aim Auto</option>
+                        <option value="chim">🎯 aim Chim 😂</option>
+                        <option value="magic">🔮 aim Magic</option>
+                        <option value="lock">🔒 aim Lock</option>
+                        <option value="check">☄️ aim Check</option>
+                    </select>
+                    <div class="mode-desc" id="modeDesc">100% đỏ – mọi vùng đều headshot</div>
+                </div>
+
+                <button type="submit" id="processBtn">🚀 Xử lý + Anti-Ban</button>
+            </form>
+
+            <div class="download-wrap" id="downloadWrap">
+                <button id="downloadBtn">
+                    ⬇️ Tải file mod
+                    <span class="file-name" id="downloadFileName">...</span>
+                </button>
+            </div>
+
+            <div id="status"></div>
+            <div id="log"></div>
+
+            <div class="footer">
+                <span class="badge">v5.0</span>
+                <span class="badge badge-anti">🛡️ Anti-Ban</span>
+                <span class="badge badge-magic">tiktok:duybmw_6</span>
+                <span class="badge badge-lock">tiktok:idogiapbao</span>
+                <span class="badge">🪙by THANH DUY</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ==================== MẬT KHẨU ====================
+        document.getElementById('unlockBtn').addEventListener('click', function() {
+            const pwd = document.getElementById('passwordInput').value;
+            const status = document.getElementById('passwordStatus');
+            if (pwd === 'duydz') {
+                document.getElementById('passwordSection').classList.add('hidden');
+                document.getElementById('mainContent').classList.add('show');
+                status.style.display = 'none';
+            } else {
+                status.style.display = 'block';
+            }
+        });
+
+        // Cho phép nhấn Enter để xác nhận mật khẩu
+        document.getElementById('passwordInput').addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                document.getElementById('unlockBtn').click();
+            }
+        });
+
+        // ==================== PARTICLE NEON + DÂY ====================
+        (function initParticleNetwork() {
+            const canvas = document.getElementById('particleNetwork');
+            const ctx = canvas.getContext('2d');
+            let width, height;
+            let particles = [];
+            const NUM = 60;
+            const MAX_DIST = 150;
+            const COLORS = ['#00ffaa', '#ff00aa', '#00aaff', '#ffaa00', '#44ff88'];
+
+            function resize() {
+                width = canvas.width = window.innerWidth;
+                height = canvas.height = window.innerHeight;
+            }
+            window.addEventListener('resize', resize);
+            resize();
+
+            class Particle {
+                constructor() {
+                    this.x = Math.random() * width;
+                    this.y = Math.random() * height;
+                    this.vx = (Math.random() - 0.5) * 0.6;
+                    this.vy = (Math.random() - 0.5) * 0.6;
+                    this.radius = 2 + Math.random() * 4;
+                    this.color = COLORS[Math.floor(Math.random() * COLORS.length)];
+                }
+                update() {
+                    this.x += this.vx;
+                    this.y += this.vy;
+                    if (this.x < 0 || this.x > width) this.vx *= -1;
+                    if (this.y < 0 || this.y > height) this.vy *= -1;
+                }
+                draw() {
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                    ctx.fillStyle = this.color;
+                    ctx.shadowColor = this.color;
+                    ctx.shadowBlur = 20;
+                    ctx.fill();
+                    ctx.shadowBlur = 0;
+                }
+            }
+
+            for (let i = 0; i < NUM; i++) {
+                particles.push(new Particle());
+            }
+
+            function drawLines() {
+                for (let i = 0; i < particles.length; i++) {
+                    for (let j = i + 1; j < particles.length; j++) {
+                        const dx = particles[i].x - particles[j].x;
+                        const dy = particles[i].y - particles[j].y;
+                        const dist = Math.sqrt(dx * dx + dy * dy);
+                        if (dist < MAX_DIST) {
+                            const opacity = 1 - (dist / MAX_DIST);
+                            ctx.beginPath();
+                            ctx.moveTo(particles[i].x, particles[i].y);
+                            ctx.lineTo(particles[j].x, particles[j].y);
+                            ctx.strokeStyle = `rgba(0, 255, 170, ${opacity * 0.5})`;
+                            ctx.lineWidth = 0.8;
+                            ctx.shadowColor = '#00ffaa';
+                            ctx.shadowBlur = 10;
+                            ctx.stroke();
+                            ctx.shadowBlur = 0;
+                        }
+                    }
+                }
+            }
+
+            function animate() {
+                ctx.clearRect(0, 0, width, height);
+                particles.forEach(p => { p.update();
+                    p.draw(); });
+                drawLines();
+                requestAnimationFrame(animate);
+            }
+            animate();
+        })();
+
+        // ==================== MÔ TẢ CHẾ ĐỘ ====================
+        const modeDesc = {
+            head: '100% đỏ – bám đầu',
+            chest: '100% đỏ – bám ngực',
+            body: '100% đỏ – bám thân',
+            drag: '🐉 100% đỏ – Dragon',
+            mixed: '100% đỏ – kết hợp',
+            auto: '100% đỏ – tự động',
+            chim: '100% đỏ – troll cực mạnh 😂',
+            magic: '🔮 Đạn tự bám + 100% đỏ',
+            lock: '🔒 Khóa mục tiêu + 100% đỏ',
+            check: '✅ 100% đỏ – Aim Check'
+        };
+        document.getElementById('modeSelect').addEventListener('change', function() {
+            document.getElementById('modeDesc').textContent = modeDesc[this.value] || '';
+        });
+
+        // ==================== LOG & STATUS ====================
+        let processedBlob = null;
+        let processedFileName = '';
+
+        function log(msg) {
+            const el = document.getElementById('log');
+            el.classList.add('show');
+            el.textContent += '> ' + msg + '\n';
+            el.scrollTop = el.scrollHeight;
+        }
+
+        function setStatus(text, type) {
+            const el = document.getElementById('status');
+            el.textContent = text;
+            el.className = type;
+            el.style.display = 'block';
+        }
+
+        function clearStatus() {
+            const el = document.getElementById('status');
+            el.style.display = 'none';
+            el.className = '';
+        }
+
+        function showDownload(blob, fileName) {
+            processedBlob = blob;
+            processedFileName = fileName;
+            const wrap = document.getElementById('downloadWrap');
+            const nameSpan = document.getElementById('downloadFileName');
+            let displayName = fileName;
+            if (displayName.length > 45) displayName = displayName.slice(0, 40) + '…';
+            nameSpan.textContent = displayName;
+            wrap.classList.add('show');
+        }
+
+        // ==================== DÒ OFFSET ====================
+        function scanOffsets(data) {
+            log('🔍 Đang dò offset...');
+            const offsets = {};
+
+            function findFloat(target, limit = 10000) {
+                const buf = new ArrayBuffer(4);
+                const view = new DataView(buf);
+                view.setFloat32(0, target, true);
+                const bytes = new Uint8Array(buf);
+                for (let i = 0; i < Math.min(data.length - 4, limit); i++) {
+                    let match = true;
+                    for (let j = 0; j < 4; j++) { if (data[i + j] !== bytes[j]) { match = false; break; } }
+                    if (match) return i;
+                }
+                return -1;
+            }
+
+            function findInt(target, limit = 10000) {
+                const buf = new ArrayBuffer(4);
+                const view = new DataView(buf);
+                view.setUint32(0, target, true);
+                const bytes = new Uint8Array(buf);
+                for (let i = 0; i < Math.min(data.length - 4, limit); i++) {
+                    let match = true;
+                    for (let j = 0; j < 4; j++) { if (data[i + j] !== bytes[j]) { match = false; break; } }
+                    if (match) return i;
+                }
+                return -1;
+            }
+
+            function findString(str, limit = 20000) {
+                const bytes = new TextEncoder().encode(str);
+                for (let i = 0; i < Math.min(data.length - bytes.length, limit); i++) {
+                    let match = true;
+                    for (let j = 0; j < bytes.length; j++) { if (data[i + j] !== bytes[j]) { match = false; break; } }
+                    if (match) return i;
+                }
+                return -1;
+            }
+
+            for (const val of [2.5, 5.0, 7.5, 10.0]) {
+                const pos = findFloat(val);
+                if (pos !== -1) { offsets.AutoAimRadius = pos; log(`   ✅ AutoAimRadius: 0x${pos.toString(16)}`); break; }
+            }
+            for (const val of [0, 1]) {
+                const pos = findInt(val);
+                if (pos !== -1) {
+                    const base = offsets.AutoAimRadius || 0;
+                    if (Math.abs(pos - base) < 80) { offsets.AimAssist = pos; log(`   ✅ AimAssist: 0x${pos.toString(16)}`); break; }
+                }
+            }
+            if (!offsets.AimAssist) { const pos = findInt(0); if (pos !== -1) { offsets.AimAssist = pos;
+                    log(`   ✅ AimAssist: 0x${pos.toString(16)}`); } }
+            for (const val of [0, 1]) {
+                const pos = findInt(val);
+                if (pos !== -1 && offsets.AimAssist) {
+                    if (Math.abs(pos - offsets.AimAssist) < 30 && pos !== offsets.AimAssist) { offsets.MagneticBullet = pos;
+                        log(`   ✅ MagneticBullet: 0x${pos.toString(16)}`); break; }
+                }
+            }
+            for (const val of [0.5, 0.6, 0.8, 1.0]) {
+                const pos = findFloat(val);
+                if (pos !== -1) {
+                    const base = offsets.AutoAimRadius || 0;
+                    if (Math.abs(pos - base) > 100) { offsets.DragFactor = pos;
+                        log(`   ✅ DragFactor: 0x${pos.toString(16)}`); break; }
+                }
+            }
+            if (!offsets.DragFactor) { const pos = findFloat(0.5); if (pos !== -1) { offsets.DragFactor = pos;
+                    log(`   ✅ DragFactor: 0x${pos.toString(16)}`); } }
+            for (const val of [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55]) {
+                const pos = findInt(val);
+                if (pos !== -1 && offsets.AimAssist) {
+                    if (Math.abs(pos - offsets.AimAssist) < 50) { offsets.AimOffsetY = pos;
+                        log(`   ✅ AimOffsetY: 0x${pos.toString(16)}`); break; }
+                }
+            }
+            if (!offsets.AimOffsetY) { const pos = findInt(0); if (pos !== -1) { offsets.AimOffsetY = pos;
+                    log(`   ✅ AimOffsetY: 0x${pos.toString(16)}`); } }
+            const neckPos = findString('Neck');
+            if (neckPos !== -1) { offsets.bone_Neck = neckPos + 8;
+                log(`   ✅ bone_Neck: 0x${(neckPos + 8).toString(16)}`); } else { const headPos = findString('Head'); if (
+                    headPos !== -1) { offsets.bone_Neck = headPos - 10;
+                    log(`   ✅ bone_Neck (gần Head): 0x${(headPos - 10).toString(16)}`); } }
+            for (const val of [0, 1]) {
+                const pos = findInt(val);
+                if (pos !== -1 && offsets.AimAssist) {
+                    if (Math.abs(pos - offsets.AimAssist) > 30 && Math.abs(pos - offsets.AimAssist) < 100) { offsets
+                            .AimLock = pos; log(`   ✅ AimLock: 0x${pos.toString(16)}`); break; }
+                }
+            }
+            if (!offsets.AimLock) { const pos = findInt(1); if (pos !== -1) { offsets.AimLock = pos;
+                    log(`   ✅ AimLock: 0x${pos.toString(16)}`); } }
+
+            log(`✅ Đã tìm được ${Object.keys(offsets).length} offset!`);
+            return offsets;
+        }
+
+        // ==================== PATCH ====================
+        function patchData(data, offsets, mode) {
+            log(`🔄 Áp dụng chế độ: ${mode.toUpperCase()}`);
+
+            const basePatch = {
+                AutoAimRadius: 10.0,
+                AimAssist: 1,
+                MagneticBullet: 1,
+                AimLock: 1,
+                AimLockRadius: 15.0,
+                LockSpeed: 0.9,
+                HeadShotRate: 1.0,
+                DamageMultiplier: 3.0
+            };
+
+            const modePatches = {
+                head: { AimOffsetY: 0 },
+                chest: { AimOffsetY: 15 },
+                body: { AimOffsetY: 30 },
+                drag: { DragFactor: 0.95, AimOffsetY: 20 },
+                mixed: { DragFactor: 0.9, AimOffsetY: 15, AutoAimRadius: 12.0, AimLockRadius: 18.0 },
+                auto: { DragFactor: 0.7, AimOffsetY: 20, AutoAimRadius: 9.5 },
+                chim: { AimOffsetY: 50, AutoAimRadius: 12.0, AimLockRadius: 20.0 },
+                magic: { AimOffsetY: 5, MagneticBullet: 1, AutoAimRadius: 12.0, AimLockRadius: 20.0 },
+                lock: { AimOffsetY: 3, AimLock: 1, AimLockRadius: 25.0, LockSpeed: 0.99, AutoAimRadius: 12.0 },
+                check: { AimOffsetY: 2, AutoAimRadius: 8.5, AimLockRadius: 12.0, LockSpeed: 0.8 }
+            };
+
+            const patch = { ...basePatch, ...(modePatches[mode] || {}) };
+            const buf = new DataView(data.buffer);
+            let count = 0;
+
+            for (const [key, value] of Object.entries(patch)) {
+                const offset = offsets[key];
+                if (offset !== undefined && offset >= 0 && offset < data.length - 4) {
+                    if (Number.isInteger(value)) {
+                        buf.setUint32(offset, value, true);
+                    } else {
+                        buf.setFloat32(offset, value, true);
+                    }
+                    log(`   🎯 ${key} = ${value} tại 0x${offset.toString(16)}`);
+                    count++;
+                } else {
+                    log(`   ⚠️ Không tìm thấy offset cho ${key}`);
+                }
+            }
+
+            log(`✅ Đã patch ${count} thông số`);
+            return data;
+        }
+
+        // ==================== ANTI-BAN ENGINE ====================
+        function antiBanEngine(originalData, patchedData) {
+            log('🛡️ Áp dụng anti-ban...');
+            if (patchedData.length !== originalData.length) {
+                if (patchedData.length > originalData.length) {
+                    patchedData = patchedData.slice(0, originalData.length);
+                } else {
+                    const padding = new Uint8Array(originalData.length - patchedData.length);
+                    const merged = new Uint8Array(originalData.length);
+                    merged.set(patchedData, 0);
+                    merged.set(padding, patchedData.length);
+                    patchedData = merged;
+                }
+            }
+            log(`   ✅ Kích thước: ${patchedData.length} bytes (giữ nguyên)`);
+            try {
+                const md5Original = CryptoJS.MD5(CryptoJS.lib.WordArray.create(originalData)).toString();
+                const checksumPos = Math.max(patchedData.length - 32, 0);
+                if (checksumPos > 0 && checksumPos + 16 <= patchedData.length) {
+                    const hex = md5Original.slice(0, 32);
+                    const bytes = new Uint8Array(16);
+                    for (let i = 0; i < 16; i++) bytes[i] = parseInt(hex.substr(i * 2, 2), 16);
+                    for (let i = 0; i < 16; i++) patchedData[checksumPos + i] = bytes[i];
+                    log(`   ✅ Spoof checksum tại 0x${checksumPos.toString(16)}`);
+                }
+            } catch (e) { log(`   ⚠️ Lỗi spoof checksum: ${e.message}`); }
+            const honeypots = [
+                { pos: 0x100, bytes: [0x00, 0x00, 0x00, 0x00] },
+                { pos: 0x200, bytes: [0xFF, 0xFF, 0xFF, 0xFF] },
+                { pos: 0x300, bytes: [0x01, 0x00, 0x00, 0x00] },
+                { pos: 0x400, bytes: [0x00, 0x00, 0x80, 0x3F] }
+            ];
+            for (const h of honeypots) {
+                if (h.pos < patchedData.length - 4) {
+                    for (let i = 0; i < h.bytes.length; i++) patchedData[h.pos + i] = h.bytes[i];
+                    log(`   ✅ Honeypot tại 0x${h.pos.toString(16)}`);
+                }
+            }
+            log('🛡️ Anti-ban hoàn tất!');
+            return patchedData;
+        }
+
+        // ==================== PROCESS ====================
+        document.getElementById('aimForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const fileInput = document.getElementById('fileInput');
+            const mode = document.getElementById('modeSelect').value;
+            const logEl = document.getElementById('log');
+            const btn = document.getElementById('processBtn');
+            const downloadWrap = document.getElementById('downloadWrap');
+
+            if (!fileInput.files.length) { setStatus('❌ Chưa chọn file!', 'error'); return; }
+
+            logEl.textContent = '';
+            logEl.classList.remove('show');
+            downloadWrap.classList.remove('show');
+            clearStatus();
+            btn.disabled = true;
+            setStatus('⏳ Đang xử lý...', 'loading');
+
+            const file = fileInput.files[0];
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const originalData = new Uint8Array(e.target.result);
+                    log(`📁 File: ${file.name} (${originalData.length} bytes)`);
+                    const offsets = scanOffsets(originalData);
+                    let patchedData = patchData(originalData, offsets, mode);
+                    patchedData = antiBanEngine(originalData, patchedData);
+                    const blob = new Blob([patchedData], { type: 'application/octet-stream' });
+                    const fileName = `aim_${mode}_${file.name}`;
+                    showDownload(blob, fileName);
+                    log('✅ Xử lý thành công!');
+                    setStatus('✅ Xử lý thành công! Nhấn nút tải file.', 'success');
+                } catch (err) {
+                    log(`❌ Lỗi: ${err.message}`);
+                    setStatus(`❌ Lỗi: ${err.message}`, 'error');
+                } finally { btn.disabled = false; }
+            };
+            reader.onerror = function() { setStatus('❌ Lỗi đọc file!', 'error');
+                btn.disabled = false; };
+            reader.readAsArrayBuffer(file);
+        });
+
+        document.getElementById('downloadBtn').addEventListener('click', function() {
+            if (!processedBlob) { setStatus('❌ Chưa có file!', 'error'); return; }
+            const url = URL.createObjectURL(processedBlob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = processedFileName;
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            URL.revokeObjectURL(url);
+            setStatus('✅ File đã tải xuống!', 'success');
+            log('⬇️ Đã tải file: ' + processedFileName);
+        });
+    </script>
+</body>
+</html>
